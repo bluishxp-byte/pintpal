@@ -5,7 +5,7 @@
   "description": "Track your pints, discover your pace, and relive every session.",
   "start_url": "/pintpal/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "orientation": "portrait",
   "theme_color": "#b88633",
   "background_color": "#f9f3e8",
@@ -21,7 +21,19 @@
       "src": "/pintpal/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/pintpal/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/pintpal/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   
@@ -31,11 +43,19 @@
       "sizes": "1170x2532",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Main tracking screen"
+      "label": "Active session tracking"
+    },
+    {
+      "src": "/pintpal/screenshot-insights.png",
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Stats and insights"
     }
   ],
   
   "categories": ["lifestyle", "food", "health"],
+  
   "shortcuts": [
     {
       "name": "New Session",
