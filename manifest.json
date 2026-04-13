@@ -5,15 +5,49 @@
   "description": "Track your pints, discover your pace, and relive every session.",
   "start_url": "/pintpal/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "theme_color": "#b88633",
   "background_color": "#f9f3e8",
+  
   "icons": [
     {
-      "src": "https://cdn.jsdelivr.net/npm/emoji-datasource-apple@1.0.0/img/apple/64/1f37a.png",
-      "sizes": "64x64",
-      "type": "image/png"
+      "src": "/pintpal/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pintpal/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "categories": ["lifestyle", "food"]
+  
+  "screenshots": [
+    {
+      "src": "/pintpal/screenshot-main.png",
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Main tracking screen"
+    }
+  ],
+  
+  "categories": ["lifestyle", "food", "health"],
+  "shortcuts": [
+    {
+      "name": "New Session",
+      "short_name": "Session",
+      "description": "Start tracking a new session",
+      "url": "/pintpal/",
+      "icons": [{ "src": "/pintpal/shortcut-beer.png", "sizes": "96x96" }]
+    }
+  ],
+  
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/pintpal/",
+  "prefer_related_applications": false
 }
