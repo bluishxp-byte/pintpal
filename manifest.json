@@ -1,0 +1,19 @@
+{
+  "id": "https://bluishxp-byte.github.io/pintpal/",
+  "name": "PintPal · Beer Tracker",
+  "short_name": "PintPal",
+  "description": "Track your pints, discover your pace, and relive every session.",
+  "start_url": "/pintpal/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#b88633",
+  "background_color": "#f9f3e8",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/npm/emoji-datasource-apple@1.0.0/img/apple/64/1f37a.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "food"]
+}
