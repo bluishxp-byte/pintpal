@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.bluishxp_byte.twa",
-        "sha256_cert_fingerprints": ["71:2E:4B:59:92:52:D7:FC:E0:67:49:6E:0B:82:35:A1:E3:55:81:56:1F:8A:AC:A8:97:C0:28:11:81:57:0F:F6"]
-      }
-    }]
