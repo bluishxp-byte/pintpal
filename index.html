@@ -680,6 +680,23 @@
     
     init();
   })();
+  
 </script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/pintpal/sw.js', { scope: '/pintpal/' })
+        .then((registration) => {
+          console.log('🍺 PintPal SW registered:', registration.scope);
+        })
+        .catch((error) => {
+          console.log('🍺 PintPal SW registration failed:', error);
+        });
+    });
+  }
+</script>
+
 </body>
 </html>
+
