@@ -136,6 +136,35 @@
     }
     body.dark .delete-last-btn { color: #d4a96a; border-color: #d4a96a; }
     .delete-last-btn:active { background: rgba(165,113,46,0.1); }
+    
+    /* Tip Jar Button Styles */
+    .tip-jar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFDD00;
+      color: #000000;
+      padding: 12px 24px;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 4px 0 #CC9900;
+      transition: transform 0.1s;
+      border: 1px solid #E6C200;
+    }
+    body.dark .tip-jar-btn {
+      background: #FFD700;
+      box-shadow: 0 4px 0 #B8860B;
+      border-color: #DAA520;
+    }
+    .tip-jar-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #CC9900;
+    }
+    body.dark .tip-jar-btn:active {
+      box-shadow: 0 1px 0 #B8860B;
+    }
   </style>
 </head>
 <body>
@@ -231,6 +260,18 @@
     <!-- Locations view -->
     <div id="insightLocationsView" style="display:none;">
       <div id="locationStatsContainer"></div>
+    </div>
+    
+    <!-- Tip Jar -->
+    <div style="margin: 20px 0 10px; text-align: center;">
+      <a href="https://buymeacoffee.com/bluish" target="_blank" class="tip-jar-btn">
+        <i class="fas fa-beer"></i> 
+        Buy me a pint
+        <span style="opacity:0.7; font-weight:400;">🍺</span>
+      </a>
+      <p style="font-size:0.75rem; opacity:0.6; margin-top:8px;">
+        Support PintPal
+      </p>
     </div>
     
     <!-- Summary stats -->
@@ -699,4 +740,3 @@
 
 </body>
 </html>
-
