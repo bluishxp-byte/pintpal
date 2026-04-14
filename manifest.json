@@ -39,18 +39,88 @@
   
   "screenshots": [
     {
-      "src": "/pintpal/screenshot-main.png",
-      "sizes": "1170x2532",
+      "src": "/pintpal/screenshots/iphone-screen-1.png",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Active session tracking"
     },
     {
-      "src": "/pintpal/screenshot-insights.png",
-      "sizes": "1170x2532",
+      "src": "/pintpal/screenshots/iphone-screen-2.png",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Stats and insights"
+      "label": "Stats and insights view"
+    },
+    {
+      "src": "/pintpal/screenshots/iphone-screen-3.png",
+      "sizes": "1284x2778",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Past sessions history"
+    },
+    {
+      "src": "/pintpal/screenshots/ipad-screen-1.png",
+      "sizes": "2048x2732",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Active session tracking (Tablet)"
+    },
+    {
+      "src": "/pintpal/screenshots/ipad-screen-2.png",
+      "sizes": "2048x2732",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stats and insights view (Tablet)"
+    },
+    {
+      "src": "/pintpal/screenshots/ipad-screen-3.png",
+      "sizes": "2048x2732",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Past sessions history (Tablet)"
+    },
+    {
+      "src": "/pintpal/screenshots/android-phone-screen-1.png",
+      "sizes": "1440x2960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Active session tracking"
+    },
+    {
+      "src": "/pintpal/screenshots/android-phone-screen-2.png",
+      "sizes": "1440x2960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Stats and insights view"
+    },
+    {
+      "src": "/pintpal/screenshots/android-phone-screen-3.png",
+      "sizes": "1440x2960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Past sessions history"
+    },
+    {
+      "src": "/pintpal/screenshots/android-tablet-screen-1.png",
+      "sizes": "2000x3000",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Active session tracking (Tablet)"
+    },
+    {
+      "src": "/pintpal/screenshots/android-tablet-screen-2.png",
+      "sizes": "2000x3000",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stats and insights view (Tablet)"
+    },
+    {
+      "src": "/pintpal/screenshots/android-tablet-screen-3.png",
+      "sizes": "2000x3000",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Past sessions history (Tablet)"
     }
   ],
   
