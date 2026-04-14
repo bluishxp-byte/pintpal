@@ -172,6 +172,27 @@
       align-items: center;
       gap: 8px;
     }
+    
+    /* Privacy Policy Footer */
+    .privacy-footer {
+      text-align: center;
+      margin-top: 16px;
+      padding: 12px;
+    }
+    .privacy-footer a {
+      color: #6f5437;
+      text-decoration: none;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .privacy-footer a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    body.dark .privacy-footer a {
+      color: #b89f7e;
+    }
   </style>
 </head>
 <body>
@@ -302,6 +323,13 @@
     <div id="pastSessionsCollapsible" class="collapsible-content">
       <div id="pastSessionsList"></div>
     </div>
+  </div>
+  
+  <!-- Privacy Policy Footer -->
+  <div class="privacy-footer">
+    <a href="/pintpal/privacy.html" target="_blank">
+      <i class="fas fa-lock"></i> Privacy Policy
+    </a>
   </div>
 </div>
 
