@@ -99,13 +99,70 @@
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
     .cal-day-header { font-weight: 700; color: #6f4e2b; padding: 8px 0; font-size: 0.9rem; }
     body.dark .cal-day-header { color: #c8aa82; }
+    
+    /* Calendar day improvements */
     .cal-day {
-      background: #f3eadc; border-radius: 20px; padding: 10px 0; font-weight: 600;
-      color: #3b2a17; cursor: pointer; transition: 0.1s; font-size: 0.95rem; touch-action: manipulation;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f3eadc;
+      border-radius: 20px;
+      padding: 8px 0;
+      font-weight: 600;
+      color: #3b2a17;
+      cursor: pointer;
+      transition: 0.1s;
+      font-size: 0.95rem;
+      touch-action: manipulation;
     }
     body.dark .cal-day { background: #4c3f30; color: #e6d5b8; }
-    .cal-day.has-drinks { background: #b88633; color: white; }
-    .cal-day.today { border: 3px solid #a5712e; }
+    
+    /* Dot indicator for days with drinks */
+    .cal-day.has-drinks::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      width: 5px;
+      height: 5px;
+      background-color: #b88633;
+      border-radius: 50%;
+    }
+    body.dark .cal-day.has-drinks::after {
+      background-color: #FFD700;
+    }
+    
+    /* Remove gold background - use dot instead */
+    .cal-day.has-drinks {
+      background: #f3eadc !important;
+      color: #3b2a17 !important;
+    }
+    body.dark .cal-day.has-drinks {
+      background: #4c3f30 !important;
+      color: #e6d5b8 !important;
+    }
+    
+    /* Selected day highlight */
+    .cal-day.selected {
+      border: 3px solid #a5712e !important;
+      background: #f3eadc !important;
+      font-weight: 700;
+    }
+    body.dark .cal-day.selected {
+      border-color: #FFD700 !important;
+      background: #4c3f30 !important;
+    }
+    
+    /* Today indicator */
+    .cal-day.today {
+      border: 2px solid #a5712e;
+      font-weight: 700;
+    }
+    body.dark .cal-day.today {
+      border-color: #FFD700;
+    }
+    
     .chart-container { margin-top: 10px; height: 190px; width: 100%; }
     canvas { max-height: 190px; width: 100% !important; }
     .live-avg { background: #e9dac8; padding: 8px 14px; border-radius: 40px; display: inline-block; font-weight: 600; margin-top: 8px; font-size: 0.9rem; }
@@ -193,6 +250,16 @@
     body.dark .privacy-footer a {
       color: #b89f7e;
     }
+    
+    /* Button group for past sessions */
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-icon {
+      min-width: 44px;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -279,7 +346,7 @@
         <button class="cal-nav-btn" id="nextMonthBtn"><i class="fas fa-chevron-right"></i></button>
       </div>
       <div id="calendarContainer"></div>
-      <div id="calendarDayDetail" class="day-detail">👆 Tap a highlighted day</div>
+      <div id="calendarDayDetail" class="day-detail">👆 Tap a day to see details</div>
     </div>
     <!-- Pie view -->
     <div id="insightPieView" style="display:none;">
@@ -318,7 +385,17 @@
         <i class="fas fa-history"></i> Past sessions
         <i class="fas fa-chevron-down collapse-toggle" id="togglePastSessions" style="font-size:1rem;"></i>
       </h3>
-      <button class="btn-outline btn-icon" id="clearAllSessionsBtn"><i class="fas fa-eraser"></i> Clear all</button>
+      <div class="btn-group">
+        <button class="btn-outline btn-icon" id="exportDataBtn" title="Export backup">
+          <i class="fas fa-download"></i>
+        </button>
+        <button class="btn-outline btn-icon" id="importDataBtn" title="Import backup">
+          <i class="fas fa-upload"></i>
+        </button>
+        <button class="btn-outline btn-icon" id="clearAllSessionsBtn" title="Clear all data">
+          <i class="fas fa-eraser"></i>
+        </button>
+      </div>
     </div>
     <div id="pastSessionsCollapsible" class="collapsible-content">
       <div id="pastSessionsList"></div>
@@ -496,27 +573,76 @@
       let html = `<div class="calendar-grid">`;
       ['S','M','T','W','T','F','S'].forEach(d=> html+=`<div class="cal-day-header">${d}</div>`);
       let day=1;
+      const today = new Date();
+      const isCurrentMonth = (today.getFullYear() === year && today.getMonth() === month);
+      const todayDate = today.getDate();
+      
       for(let i=0; i<6; i++) {
         for(let j=0; j<7; j++) {
-          if(i===0 && j<firstDay) html+=`<div class="cal-day" style="background:transparent;"></div>`;
-          else if(day>daysInMonth) html+=`<div class="cal-day" style="background:transparent;"></div>`;
+          if(i===0 && j<firstDay) {
+            html+=`<div class="cal-day" style="background:transparent; cursor:default;"></div>`;
+          }
+          else if(day>daysInMonth) {
+            html+=`<div class="cal-day" style="background:transparent; cursor:default;"></div>`;
+          }
           else {
             const has = drinkMap.has(day);
-            const todayClass = (day===new Date().getDate() && month===new Date().getMonth() && year===new Date().getFullYear()) ? 'today' : '';
-            html += `<div class="cal-day ${has?'has-drinks':''} ${todayClass}" data-day="${day}" data-pints="${drinkMap.get(day)||0}">${day}</div>`;
+            const isToday = isCurrentMonth && day === todayDate;
+            const todayClass = isToday ? 'today' : '';
+            const pints = drinkMap.get(day) || 0;
+            
+            html += `<div class="cal-day ${has?'has-drinks':''} ${todayClass}" data-day="${day}" data-pints="${pints}">${day}</div>`;
             day++;
           }
         }
       }
       html += `</div>`;
+      
       document.getElementById('calendarContainer').innerHTML = html;
-      document.querySelectorAll('.cal-day.has-drinks').forEach(el => {
+      
+      // Track selected day
+      let selectedDayElement = null;
+      
+      document.querySelectorAll('.cal-day[data-day]').forEach(el => {
         el.addEventListener('click', (e) => {
-          const d = e.currentTarget.dataset.day;
-          const pints = parseFloat(e.currentTarget.dataset.pints).toFixed(1);
-          document.getElementById('calendarDayDetail').innerHTML = `📅 ${monthNames[month].slice(0,3)} ${d}, ${year}: ${pints} pints 🍺`;
+          const dayElement = e.currentTarget;
+          const d = dayElement.dataset.day;
+          const pints = parseFloat(dayElement.dataset.pints).toFixed(1);
+          
+          // Remove previous selection
+          if (selectedDayElement) {
+            selectedDayElement.classList.remove('selected');
+          }
+          
+          // Add selection to current day
+          dayElement.classList.add('selected');
+          selectedDayElement = dayElement;
+          
+          // Update detail text
+          const hasDrinks = dayElement.classList.contains('has-drinks');
+          if (hasDrinks) {
+            document.getElementById('calendarDayDetail').innerHTML = `📅 ${monthNames[month].slice(0,3)} ${d}, ${year}: ${pints} pints 🍺`;
+          } else {
+            document.getElementById('calendarDayDetail').innerHTML = `📅 ${monthNames[month].slice(0,3)} ${d}, ${year}: No drinks tracked`;
+          }
         });
       });
+      
+      // Auto-select today if no selection
+      if (isCurrentMonth) {
+        const todayElement = document.querySelector(`.cal-day[data-day="${todayDate}"]`);
+        if (todayElement) {
+          todayElement.classList.add('selected');
+          selectedDayElement = todayElement;
+          const hasDrinks = todayElement.classList.contains('has-drinks');
+          const pints = parseFloat(todayElement.dataset.pints).toFixed(1);
+          if (hasDrinks) {
+            document.getElementById('calendarDayDetail').innerHTML = `📅 ${monthNames[month].slice(0,3)} ${todayDate}, ${year}: ${pints} pints 🍺`;
+          } else {
+            document.getElementById('calendarDayDetail').innerHTML = `📅 ${monthNames[month].slice(0,3)} ${todayDate}, ${year}: No drinks tracked`;
+          }
+        }
+      }
     }
     
     function updateBestAndStreak() {
@@ -606,9 +732,6 @@
     function deleteLastDrink() {
       if (!currentSession.startTime || currentSession.drinks.length === 0) return;
       currentSession.drinks.pop();
-      if (currentSession.drinks.length === 0) {
-        // If no drinks left, optionally reset session? Keep session alive.
-      }
       saveToStorage();
       fullUIUpdate();
     }
@@ -640,6 +763,97 @@
         saveToStorage(); 
         fullUIUpdate(); 
       } 
+    }
+    
+    // ---------- EXPORT / IMPORT ----------
+    function exportAllData() {
+      const exportData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        currentSession: currentSession,
+        savedSessions: savedSessions,
+        theme: localStorage.getItem('pintpal_theme') || 'light'
+      };
+      
+      const jsonStr = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pintpal-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      alert('✅ Data exported! Save this file somewhere safe.');
+    }
+    
+    function importAllData(file) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          
+          if (!importedData.savedSessions && !importedData.currentSession) {
+            alert('❌ Invalid backup file.');
+            return;
+          }
+          
+          if (!confirm('This will replace ALL your current data. Continue?')) {
+            return;
+          }
+          
+          if (importedData.savedSessions) {
+            savedSessions = importedData.savedSessions;
+          }
+          
+          if (importedData.currentSession) {
+            currentSession = importedData.currentSession;
+            if (currentSession.startTime) {
+              startTimer();
+            }
+          } else {
+            currentSession = { id: null, startTime: null, drinks: [], location: null };
+            stopTimer();
+          }
+          
+          if (importedData.theme) {
+            localStorage.setItem('pintpal_theme', importedData.theme);
+            const isDark = importedData.theme === 'dark';
+            document.body.classList.toggle('dark', isDark);
+            const themeIcon = document.querySelector('#themeToggle');
+            if (themeIcon) {
+              themeIcon.classList.toggle('fa-moon', !isDark);
+              themeIcon.classList.toggle('fa-sun', isDark);
+            }
+          }
+          
+          saveToStorage();
+          fullUIUpdate();
+          
+          const sessionCount = importedData.savedSessions ? importedData.savedSessions.length : 0;
+          alert(`✅ Data imported successfully!\n${sessionCount} sessions restored.`);
+          
+        } catch (error) {
+          alert('❌ Could not read backup file.');
+        }
+      };
+      
+      reader.readAsText(file);
+    }
+    
+    function triggerImport() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json,application/json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) importAllData(file);
+      };
+      input.click();
     }
     
     function renderPastSessions() {
@@ -744,6 +958,8 @@
         else if(saveCurrentSession(loc)) panel.style.display='none'; 
       };
       document.getElementById('clearAllSessionsBtn').onclick = clearAllSaved;
+      document.getElementById('exportDataBtn').onclick = exportAllData;
+      document.getElementById('importDataBtn').onclick = triggerImport;
       
       const select = document.getElementById('insightSelect');
       select.onchange = (e) => switchInsight(e.target.value);
